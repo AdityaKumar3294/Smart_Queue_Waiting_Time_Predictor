@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Queue & Waiting Time Predictor</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#f4f6f9;
+}
+
+header{
+background:#2c3e50;
+color:white;
+padding:15px;
+text-align:center;
+font-size:24px;
+}
+
+.tabs{
+display:flex;
+flex-wrap:wrap;
+background:#34495e;
+}
+
+.tabs button{
+flex:1;
+padding:12px;
+border:none;
+background:#34495e;
+color:white;
+cursor:pointer;
+font-size:14px;
+}
+
+.tabs button:hover{
+background:#1abc9c;
+}
+
+.tab-content{
+display:none;
+padding:20px;
+background:white;
+}
+
+.active{
+display:block;
+}
+
+.card{
+background:#ecf0f1;
+padding:20px;
+border-radius:10px;
+margin-top:10px;
+}
+
+button.action{
+background:#1abc9c;
+border:none;
+padding:10px 20px;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+input{
+padding:8px;
+margin:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+Smart Queue & Waiting Time Predictor
+</header>
+
+<div class="tabs">
+
+<button onclick="openTab('peak')">Peak Hour Prediction</button>
+<button onclick="openTab('token')">Smart Token</button>
+<button onclick="openTab('queue')">Live Queue</button>
+<button onclick="openTab('notify')">Turn Notification</button>
+<button onclick="openTab('chat')">Chatbot</button>
+<button onclick="openTab('branch')">Branch Comparison</button>
+<button onclick="openTab('qr')">QR Check-in</button>
+<button onclick="openTab('impact')">Weather / Traffic</button>
+
+</div>
+
+
+<!-- Peak Hour Prediction -->
+
+<div id="peak" class="tab-content active">
+<h2>Peak Hour Prediction</h2>
+
+<div class="card">
+<p>Enter number of visitors:</p>
+
+<input type="number" id="visitors">
+
+<button class="action" onclick="predictPeak()">Predict</button>
+
+<p id="peakResult"></p>
+</div>
+
+</div>
+
+
+
+<!-- Smart Token -->
+
+<div id="token" class="tab-content">
+<h2>Smart Token System</h2>
+
+<div class="card">
+
+<button class="action" onclick="generateToken()">Generate Token</button>
+
+<p id="tokenNumber"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- Live Queue -->
+
+<div id="queue" class="tab-content">
+<h2>Live Queue Status</h2>
+
+<div class="card">
+
+<p>People currently in queue:</p>
+
+<h3 id="queueCount">12</h3>
+
+<button class="action" onclick="updateQueue()">Refresh</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Notification -->
+
+<div id="notify" class="tab-content">
+
+<h2>Turn Notification</h2>
+
+<div class="card">
+
+<input placeholder="Enter Token Number" id="tokenInput">
+
+<button class="action" onclick="notifyTurn()">Check Turn</button>
+
+<p id="notifyMsg"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- Chatbot -->
+
+<div id="chat" class="tab-content">
+
+<h2>Queue Assistant Chatbot</h2>
+
+<div class="card">
+
+<input id="userMsg" placeholder="Ask about waiting time...">
+
+<button class="action" onclick="chatbot()">Send</button>
+
+<p id="botReply"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- Branch Comparison -->
+
+<div id="branch" class="tab-content">
+
+<h2>Multi Branch Comparison</h2>
+
+<div class="card">
+
+<table border="1" cellpadding="10">
+
+<tr>
+<th>Branch</th>
+<th>Waiting Time</th>
+</tr>
+
+<tr>
+<td>Main Branch</td>
+<td>15 min</td>
+</tr>
+
+<tr>
+<td>City Center</td>
+<td>30 min</td>
+</tr>
+
+<tr>
+<td>North Branch</td>
+<td>10 min</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<!-- QR -->
+
+<div id="qr" class="tab-content">
+
+<h2>QR Code Check-in</h2>
+
+<div class="card">
+
+<p>Scan QR to join queue</p>
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=JoinQueue">
+
+<p>After scanning, your token will be generated automatically.</p>
+
+</div>
+
+</div>
+
+
+
+<!-- Weather Traffic -->
+
+<div id="impact" class="tab-content">
+
+<h2>Weather & Traffic Impact Prediction</h2>
+
+<div class="card">
+
+<button class="action" onclick="impact()">Check Impact</button>
+
+<p id="impactResult"></p>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+function openTab(tab){
+let tabs=document.querySelectorAll(".tab-content");
+
+tabs.forEach(t=>t.style.display="none");
+
+document.getElementById(tab).style.display="block";
+}
+
+
+
+function predictPeak(){
+
+let visitors=document.getElementById("visitors").value;
+
+let result="";
+
+if(visitors>50)
+result="High Peak Hour Expected";
+
+else if(visitors>20)
+result="Moderate Crowd Expected";
+
+else
+result="Low Crowd";
+
+document.getElementById("peakResult").innerText=result;
+
+}
+
+
+
+let token=100;
+
+function generateToken(){
+
+token++;
+
+document.getElementById("tokenNumber").innerText="Your Token Number: "+token;
+
+}
+
+
+
+function updateQueue(){
+
+let q=Math.floor(Math.random()*30);
+
+document.getElementById("queueCount").innerText=q;
+
+}
+
+
+
+function notifyTurn(){
+
+let input=document.getElementById("tokenInput").value;
+
+if(input<110)
+
+document.getElementById("notifyMsg").innerText="Your turn is coming soon!";
+
+else
+
+document.getElementById("notifyMsg").innerText="Please wait.";
+
+}
+
+
+
+function chatbot(){
+
+let msg=document.getElementById("userMsg").value.toLowerCase();
+
+let reply="";
+
+if(msg.includes("wait"))
+reply="Estimated waiting time is 15 minutes.";
+
+else if(msg.includes("queue"))
+reply="Current queue length is 12 people.";
+
+else
+reply="Please ask about queue or waiting time.";
+
+document.getElementById("botReply").innerText=reply;
+
+}
+
+
+
+function impact(){
+
+let r=Math.random();
+
+let result="";
+
+if(r>0.6)
+result="Heavy traffic may increase waiting time.";
+
+else
+result="Normal queue expected today.";
+
+document.getElementById("impactResult").innerText=result;
+
+}
+
+</script>
+
+</body>
+</html>
